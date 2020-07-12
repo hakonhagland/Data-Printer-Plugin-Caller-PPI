@@ -46,6 +46,8 @@ sub _bless {
 
 =head1 NAME
 
+=encoding UTF-8
+
 Data::Printer::Plugin::Caller::PPI - Module abstract placeholder text
 
 =head1 SYNOPSIS
