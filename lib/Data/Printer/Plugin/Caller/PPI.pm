@@ -1,9 +1,46 @@
 package Data::Printer::Plugin::Caller::PPI;
-
+use feature qw(say);
 use strict;
 use warnings;
 
+use Carp;
 our $VERSION = '0.001';
+
+sub new {
+    my ( $class, %args ) = @_;
+
+    my $self = _bless( \%args, [qw(parent template caller)], $class);
+    return $self;
+}
+
+sub get_message {
+    my ( $self ) = @_;
+
+    my $message = "";
+    return $message;
+}
+
+sub _bless {
+    my ( $args, $expected, $class ) = @_;
+
+    my %exp = map { $_ => 1 } @$expected;
+    for my $key (keys %$args) {
+        if (!exists $exp{$key} ) {
+            carp "Unexpected argument to constructor for class '$class': " . $key;
+        }
+        delete $exp{$key};
+    }
+    my @k = keys %exp;
+    if (@k) {
+        carp 'Missing argument'
+          . ((@k > 1) ? 's' : '')
+          . ": '"
+          . (join ', ', keys %exp), "'";
+    }
+    return bless $args, $class;
+}
+
+
 
 1;
 
