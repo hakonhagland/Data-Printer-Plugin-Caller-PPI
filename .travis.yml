@@ -19,4 +19,4 @@ matrix:
       env: COVERAGE=1
 before_install:
   - eval $(curl https://travis-perl.github.io/init) --auto
-  - git clone --single-branch --branch cp_dev https://github.com/hakonhagland/Data-Printer.git && cd Data-Printer && cpanm .
+  - git clone --single-branch --branch cp_dev https://github.com/hakonhagland/Data-Printer.git && cd Data-Printer && cpanm . && cd ..
