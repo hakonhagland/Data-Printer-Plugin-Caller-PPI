@@ -1,8 +1,4 @@
-os:
-  - linux
-  - osx
 language: perl
-sudo: false
 perl:
   - 5.10
   - 5.12
@@ -19,7 +15,6 @@ perl:
 matrix:
   include:
     - perl: 5.32
-      os: linux
       env: COVERAGE=1
 before_install:
   - eval $(curl https://travis-perl.github.io/init) --auto

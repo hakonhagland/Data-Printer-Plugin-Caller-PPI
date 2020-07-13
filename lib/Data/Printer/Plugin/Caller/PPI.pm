@@ -26,13 +26,13 @@ sub _bless {
     my %exp = map { $_ => 1 } @$expected;
     for my $key (keys %$args) {
         if (!exists $exp{$key} ) {
-            carp "Unexpected argument to constructor for class '$class': " . $key;
+            croak "Unexpected argument to constructor for class '$class': " . $key;
         }
         delete $exp{$key};
     }
     my @k = keys %exp;
     if (@k) {
-        carp 'Missing argument'
+        croak 'Missing argument'
           . ((@k > 1) ? 's' : '')
           . ": '"
           . (join ', ', keys %exp), "'";
