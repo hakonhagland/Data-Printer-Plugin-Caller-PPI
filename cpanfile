@@ -1,9 +1,15 @@
 requires 'Data::Printer', '>= 0.99';
+requires 'Carp';
+requires 'Cwd';
+requires 'File::Spec';
+requires 'List::Util';
+requires 'PPI';
 test_requires 'Carp';
 test_requires 'Cwd';
 test_requires 'File::Basename';
 test_requires 'File::HomeDir::Test';
 test_requires 'File::Spec';
+test_requires 'File::Temp';
 test_requires 'Test::More';
 test_requires 'Test::Output';
 test_requires 'version';

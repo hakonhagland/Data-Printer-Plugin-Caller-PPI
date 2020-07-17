@@ -10,19 +10,12 @@ BEGIN {
         unshift @INC, $dir;
     }
 }
-use Carp;
 use Data::Printer colored        => 0,
                   use_prototypes => 0,
                   caller_info    => 1,
                   caller_plugin  => 'PPI';
 use Data::Printer::Plugin::Caller::PPI;
-use Data::Printer;
-use Cwd ();
-use File::Basename ();
-use File::Spec;
-use File::Temp ();
 use Test::More;
-use Test::Output;
 use version;
 
 # This module should only be used with the new version of DDP
