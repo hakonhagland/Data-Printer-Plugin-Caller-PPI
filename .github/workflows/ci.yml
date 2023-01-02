@@ -29,6 +29,8 @@ jobs:
         AUTHOR_TESTING: 1
         RELEASE_TESTING: 1
       run: |
+        echo $PWD
+        ls -l
         perl Makefile.PL
         make
         make test
