@@ -21,14 +21,14 @@ jobs:
         perl -v
     - name: Install modules
       run: |
-        - git clone --single-branch --branch cp_dev2 https://github.com/hakonhagland/Data-Printer.git
-        - cd Data-Printer && cpanm .
-        - cpanm --installdeps .
+        git clone --single-branch --branch cp_dev2 https://github.com/hakonhagland/Data-Printer.git
+        cd Data-Printer && cpanm .
+        cpanm --installdeps .
     - name: Build module and execute tests
       env:
         AUTHOR_TESTING: 1
         RELEASE_TESTING: 1
       run: |
-        - perl Makefile.PL
-        - make
-        - make test
+        perl Makefile.PL
+        make
+        make test
