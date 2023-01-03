@@ -24,6 +24,7 @@ jobs:
         git clone --single-branch --branch cp_dev2 https://github.com/hakonhagland/Data-Printer.git
         cd Data-Printer && cpanm .
         cpanm --installdeps .
+        cpanm File::HomeDir::Test
     - name: Build module and execute tests
       env:
         AUTHOR_TESTING: 1
