@@ -24,8 +24,8 @@ jobs:
         git clone --single-branch --branch cp_dev2 https://github.com/hakonhagland/Data-Printer.git
         cd Data-Printer && cpanm .
         cpanm --quiet --notest Dist::Zilla
-        dzil --authordeps | cpanm --quiet --notest
-        dzil --listdeps | cpanm --quite --notest
+        dzil authordeps | cpanm --quiet --notest
+        dzil listdeps | cpanm --quite --notest
     - name: Build module and execute tests
       env:
         AUTHOR_TESTING: 1
