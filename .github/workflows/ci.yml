@@ -22,10 +22,12 @@ jobs:
     - name: Install modules
       run: |
         git clone --single-branch --branch cp_dev2 https://github.com/hakonhagland/Data-Printer.git
-        cd Data-Printer && cpanm .
+        cd Data-Printer
+        cpanm .
+        cd ..
         cpanm --quiet --notest Dist::Zilla
         dzil authordeps | cpanm --quiet --notest
-        dzil listdeps | cpanm --quite --notest
+        dzil listdeps | cpanm --quiet --notest
     - name: Build module and execute tests
       env:
         AUTHOR_TESTING: 1
