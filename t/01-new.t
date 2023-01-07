@@ -4,11 +4,9 @@ use warnings;
 
 BEGIN {
     # Load this before "Data::Printer" to avoid user's .dataprinter
-    use File::HomeDir::Test;
-    delete $ENV{DATAPRINTERRC};
-    if (my $dir = $ENV{DEVEL_DDP_DIR}) {
-        unshift @INC, $dir;
-    }
+    use Data::Printer::Config;
+    no warnings 'redefine';
+    *Data::Printer::Config::load_rc_file = sub { {} };
 }
 use Data::Printer colored        => 0,
                   use_prototypes => 0,
