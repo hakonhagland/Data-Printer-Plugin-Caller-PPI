@@ -10,6 +10,7 @@ BEGIN {
 }
 use Carp;
 use Cwd ();
+use Data::Printer::Plugin::Caller::PPI; # make sure %INC is updated with this
 use File::Basename ();
 use File::Spec;
 use File::Temp ();
@@ -331,6 +332,23 @@ sub _get_expect_regex {
     return qr/^\Q$expect1\E\d+\Q$expect2\E/;
 }
 
+sub _get_mod_path {
+    my @mods = ('Data/Printer.pm', 'Data/Printer/Plugin/Caller/PPI.pm');
+    my %paths;
+    for my $mod (@mods) {
+        if (exists $INC{$mod}) {
+            my $mod_path = $INC{$mod};
+            $mod_path =~ s{/\Q$mod\E$}{};
+            $paths{$mod_path}++;
+        }
+        else {
+            die "Unxepected: Could not determine path to $mod";
+        }
+    }
+    my @paths = map {"'" . $_ . "'"} keys %paths;
+    my $path = join ", ", @paths;
+    return $path;
+}
 
 {
     my $decl_str;
@@ -397,8 +415,7 @@ END_STR
 sub _create_script1 {
     my ( $temp_dir, $statement, $proto ) = @_;
 
-    my $mod_path = File::Basename::dirname( $INC{'Data/Printer.pm'} );
-    $mod_path = File::Basename::dirname( $mod_path );
+    my $mod_path = _get_mod_path();
     my $var_decl = _get_script_var_decl();
     my $sub_def = _get_script_sub_def();
     my $use_dataprinter = _get_script_use_str(proto => $proto);
@@ -406,11 +423,12 @@ sub _create_script1 {
 use strict;
 use warnings;
 
-use lib '$mod_path';
+use lib $mod_path;
 
 BEGIN {
-    delete \$ENV{DATAPRINTERRC};
-    use File::HomeDir::Test;  # avoid user's .dataprinter
+    use Data::Printer::Config;
+    no warnings 'redefine';
+    *Data::Printer::Config::load_rc_file = sub { {} };
     use Term::ANSIColor;
 };
 
@@ -491,8 +509,9 @@ use warnings;
 use lib '.';  
 
 BEGIN {
-    delete \$ENV{DATAPRINTERRC};
-    use File::HomeDir::Test;  # avoid user's .dataprinter
+    use Data::Printer::Config;
+    no warnings 'redefine';
+    *Data::Printer::Config::load_rc_file = sub { {} };
     use Term::ANSIColor;
 };
 
@@ -520,8 +539,7 @@ sub _write_test_module {
     my ( $statement, $base_name, $dir, $proto  ) = @_;
 
     my $name = $dir . '::' . $base_name;
-    my $mod_path = File::Basename::dirname( $INC{'Data/Printer.pm'} );
-    $mod_path = File::Basename::dirname( $mod_path );
+    my $mod_path = _get_mod_path();
     my $var_decl = _get_script_var_decl();
     my $sub_def = _get_script_sub_def();
     my $use_dataprinter = _get_script_use_str(proto => $proto);
@@ -531,8 +549,13 @@ package $name;
 
 use strict;
 use warnings;
-use lib '$mod_path';
-
+use lib $mod_path;
+BEGIN {
+    use Data::Printer::Config;
+    no warnings 'redefine';
+    *Data::Printer::Config::load_rc_file = sub { {} };
+    use Term::ANSIColor;
+};
 $$use_dataprinter;
 
 sub func {
@@ -569,16 +592,20 @@ sub _create_test_helper_module {
     my $var_decl = _get_script_var_decl();
     my $sub_def = _get_script_sub_def();
     my $use_dataprinter = _get_script_use_str( proto => $proto );
-    my $mod_path = File::Basename::dirname( $INC{'Data/Printer.pm'} );
-    $mod_path = File::Basename::dirname( $mod_path );
+    my $mod_path = _get_mod_path();
 
     my $script =  <<"END_SCRIPT";
 package $module_name;
 
 use strict;
 use warnings;
-use lib '$mod_path';
-
+use lib $mod_path;
+BEGIN {
+    use Data::Printer::Config;
+    no warnings 'redefine';
+    *Data::Printer::Config::load_rc_file = sub { {} };
+    use Term::ANSIColor;
+};
 $$use_dataprinter;
 
 sub func {
