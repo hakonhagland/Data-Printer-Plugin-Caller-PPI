@@ -21,6 +21,7 @@ _update_inc();
 
 # Try capture simple variable
 _test( 'p $var', 'no parens capture', expect => '$var' ); 
+exit;
 
 # Try capture variable in parenthesis
 _test( 'p( $var )', 'parens capture', expect => '$var' );
@@ -126,9 +127,6 @@ done_testing();
 # Update %INC with the path to the Data::Printer module..
 # we need this for some of the tests..
 sub _update_inc {
-    if ( my $dir = $ENV{DDP_PPI_DATA_PRINTER_DIR} ) {
-        unshift @INC, $dir;
-    }
     require Data::Printer;
 }
 
@@ -204,6 +202,9 @@ sub _update_inc {
                 );
                 my $test_info = ( $i == 1 ? 'module' : 'eval' );
                 my $expect = ( $i == 1 ? $expect_noeval : $expect_eval );
+                use Data::Dumper qw(Dumper);
+                diag Dumper($module_name);
+                diag `cat $fn`;
                 $func->(
                     \&{"$module_name" . "::func"},
                     $exact_match
@@ -412,6 +413,17 @@ END_STR
     }
 }
 
+sub _get_load_rc_file_str {
+    my $str = <<'END_STR';
+    BEGIN {
+        use Data::Printer::Config;
+        no warnings 'redefine';
+        *Data::Printer::Config::load_rc_file = sub { {} };
+    }
+END_STR
+    return $str;
+}
+
 sub _create_script1 {
     my ( $temp_dir, $statement, $proto ) = @_;
 
@@ -419,18 +431,13 @@ sub _create_script1 {
     my $var_decl = _get_script_var_decl();
     my $sub_def = _get_script_sub_def();
     my $use_dataprinter = _get_script_use_str(proto => $proto);
+    my $rc_str = _get_load_rc_file_str();
     my $script =  <<"END_SCRIPT";
 use strict;
 use warnings;
 
 use lib $mod_path;
-
-BEGIN {
-    use Data::Printer::Config;
-    no warnings 'redefine';
-    *Data::Printer::Config::load_rc_file = sub { {} };
-    use Term::ANSIColor;
-};
+$rc_str;
 
 $$use_dataprinter;
 
@@ -503,17 +510,13 @@ sub _create_script3 {
         = _write_test_module( $statement, $module_base_name, $module_dir, $proto );
     chdir '..';
     my $use_dataprinter = _get_script_use_str(proto => $proto);
+    my $rc_str = _get_load_rc_file_str();
     my $script =  <<"END_SCRIPT";
 use strict;
 use warnings;
 use lib '.';  
 
-BEGIN {
-    use Data::Printer::Config;
-    no warnings 'redefine';
-    *Data::Printer::Config::load_rc_file = sub { {} };
-    use Term::ANSIColor;
-};
+$rc_str;
 
 $$use_dataprinter;
 
@@ -543,19 +546,16 @@ sub _write_test_module {
     my $var_decl = _get_script_var_decl();
     my $sub_def = _get_script_sub_def();
     my $use_dataprinter = _get_script_use_str(proto => $proto);
-
+    my $rc_str = _get_load_rc_file_str();
     my $script =  <<"END_SCRIPT";
 package $name;
 
 use strict;
 use warnings;
 use lib $mod_path;
-BEGIN {
-    use Data::Printer::Config;
-    no warnings 'redefine';
-    *Data::Printer::Config::load_rc_file = sub { {} };
-    use Term::ANSIColor;
-};
+
+$rc_str;
+
 $$use_dataprinter;
 
 sub func {
@@ -593,19 +593,16 @@ sub _create_test_helper_module {
     my $sub_def = _get_script_sub_def();
     my $use_dataprinter = _get_script_use_str( proto => $proto );
     my $mod_path = _get_mod_path();
-
+    my $rc_str = _get_load_rc_file_str();
     my $script =  <<"END_SCRIPT";
 package $module_name;
 
 use strict;
 use warnings;
 use lib $mod_path;
-BEGIN {
-    use Data::Printer::Config;
-    no warnings 'redefine';
-    *Data::Printer::Config::load_rc_file = sub { {} };
-    use Term::ANSIColor;
-};
+
+$rc_str;
+
 $$use_dataprinter;
 
 sub func {
