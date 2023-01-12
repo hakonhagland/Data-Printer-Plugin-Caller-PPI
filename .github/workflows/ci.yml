@@ -28,7 +28,7 @@ jobs:
         cpanm --quiet --notest Dist::Zilla
         dzil authordeps | cpanm --quiet --notest
         dzil listdeps | cpanm --quiet --notest
-    - debug:
+    - name: debug
       run: |
         perl -MData::Printer -E'say $INC{"Data/Printer.pm"}'
     - name: Build module and execute tests
