@@ -16,6 +16,7 @@ use Data::Printer::Plugin::Caller::PPI;
 use Test::More;
 use version;
 
+diag "modpath = $INC{'Data/Printer/Plugin/Caller/PPI.pm'}";
 # This module should only be used with the new version of DDP
 ok( (version->parse($Data::Printer::VERSION) >= version->parse("0.91")),
   "Data::Printer version is high enough");
