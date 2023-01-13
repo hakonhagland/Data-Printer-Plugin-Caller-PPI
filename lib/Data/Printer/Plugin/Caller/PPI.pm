@@ -38,10 +38,13 @@ sub get_message {
     $self->{package} = $self->{caller}[0];
     $self->{filename} = $self->{caller}[1];
     $self->{lineno} = $self->{caller}[2];
+    warn "get_message() called..";
     # Handle the package, filename, and line part (but not the variable name part)
     my $message = $self->handle_package_filename_line( );
     if ( $message ) {
+        warn "handle_var_name..";
         $message = $self->handle_var_name( $message );
+        warn "message = $message";
     }
     return $message;
 }
