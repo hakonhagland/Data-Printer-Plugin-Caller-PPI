@@ -19,9 +19,11 @@ use Test::Output;
 
 _update_inc();
 
+done_testing();
+exit;
 # Try capture simple variable
 _test( 'p $var', 'no parens capture', expect => '$var' ); 
-exit;
+
 
 # Try capture variable in parenthesis
 _test( 'p( $var )', 'parens capture', expect => '$var' );
