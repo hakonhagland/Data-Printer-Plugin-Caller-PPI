@@ -26,4 +26,5 @@ my @a = [0,1,2];
 my $res = p @a;
 
 ok $res == 1;
+
 done_testing();
