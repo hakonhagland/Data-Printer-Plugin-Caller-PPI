@@ -6,8 +6,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        perl: [ '5.20', '5.22', '5.24', '5.26', '5.28',
-                '5.30', '5.32', '5.34', '5.36', '5.36-threaded' ]
+        perl: [ '5.26', '5.28', '5.30', '5.32', '5.34', '5.36', '5.36-threaded' ]
         # See options here: https://hub.docker.com/_/perl/tags
 
     runs-on: ubuntu-latest
@@ -23,16 +22,13 @@ jobs:
       run: |
         cpanm --quiet --notest Dist::Zilla
         dzil authordeps | cpanm --quiet --notest
-        echo ok1
-        dzil listdeps --verbose
-        echo ok2
+        # Note: it seems "dzil listdeps" will not work with git < 2.20 (which is installed for
+        #   docker containers perl:5.24 and less perl versions. So this is the reason we do not test for perl <= 5.24)
+        #   The error message I got was: "fatal: Not a git repository (or any parent up to mount point /__w)"
         dzil listdeps | cpanm --quiet --notest
         # We neeed to install Data::Printer from cp_dev2 _after_ (not before) the previous install commands
         #  since those will reinstall Data::Printer with another version
-        echo $PWD
-        ls
         git clone --single-branch --branch cp_dev2 https://github.com/hakonhagland/Data-Printer.git
-        ls
         cd Data-Printer
         cpanm .
         cd ..
