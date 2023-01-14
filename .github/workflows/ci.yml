@@ -32,6 +32,7 @@ jobs:
         cd ..
     - name: debug
       run: |
+        git --version
         which perl
         perl --version
     - name: Build module and execute tests
