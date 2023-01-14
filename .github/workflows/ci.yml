@@ -23,14 +23,17 @@ jobs:
       run: |
         git clone --single-branch --branch cp_dev2 https://github.com/hakonhagland/Data-Printer.git
         cd Data-Printer
-        cpanm .
+        cpanm -v .
         cd ..
         cpanm --quiet --notest Dist::Zilla
         dzil authordeps | cpanm --quiet --notest
         dzil listdeps | cpanm --quiet --notest
     - name: debug
       run: |
+        which perl
+        perl --version
         perl -MData::Printer -E'say $INC{"Data/Printer.pm"}'
+        perl -MData::Printer -E'say $INC{"Data/Printer/Object.pm"}'
     - name: Build module and execute tests
       env:
         AUTHOR_TESTING: 1
