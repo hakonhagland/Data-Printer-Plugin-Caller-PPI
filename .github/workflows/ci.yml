@@ -21,15 +21,14 @@ jobs:
         perl -v
     - name: Install modules
       run: |
+        cpanm --quiet --notest Dist::Zilla
+        dzil authordeps | cpanm --quiet --notest
+        dzil listdeps | cpanm --quiet --notest
         git clone --single-branch --branch cp_dev2 https://github.com/hakonhagland/Data-Printer.git
         cd Data-Printer
         cpanm -v .
         cat /usr/local/lib/perl5/site_perl/5.34.1/Data/Printer/Object.pm
         cd ..
-        cpanm --quiet --notest Dist::Zilla
-        dzil authordeps | cpanm --quiet --notest
-        dzil listdeps | cpanm --quiet --notest
-        cat /usr/local/lib/perl5/site_perl/5.34.1/Data/Printer/Object.pm
     - name: debug
       run: |
         which perl
