@@ -23,7 +23,7 @@ jobs:
       run: |
         git clone --single-branch --branch cp_dev2 https://github.com/hakonhagland/Data-Printer.git
         cd Data-Printer
-        cat lib/Data/Printer/Object.pm
+        cat /usr/local/lib/perl5/site_perl/5.34.1/Data/Printer/Object.pm
         cpanm -v .
         cat /usr/local/lib/perl5/site_perl/5.34.1/Data/Printer/Object.pm
         cd ..
