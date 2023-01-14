@@ -23,6 +23,7 @@ jobs:
       run: |
         cpanm --quiet --notest Dist::Zilla
         dzil authordeps | cpanm --quiet --notest
+        dzil listdeps
         dzil listdeps | cpanm --quiet --notest
         # We neeed to install Data::Printer from cp_dev2 _after_ (not before) the previous install commands
         #  since those will reinstall Data::Printer with another version
