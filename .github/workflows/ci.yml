@@ -25,6 +25,7 @@ jobs:
         cd Data-Printer
         cat lib/Data/Printer/Object.pm
         cpanm -v .
+        cat /usr/local/lib/perl5/site_perl/5.34.1/Data/Printer/Object.pm
         cd ..
         cpanm --quiet --notest Dist::Zilla
         dzil authordeps | cpanm --quiet --notest
