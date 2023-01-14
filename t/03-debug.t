@@ -29,7 +29,4 @@ diag "res = $res";
 
 ok $res == 1;
 
-my $file = $INC{"Data/Printer/Object.pm"};
-diag "file = $file";
-diag `cat $file`;
 done_testing();
