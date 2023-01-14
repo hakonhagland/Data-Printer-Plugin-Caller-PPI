@@ -36,6 +36,7 @@ jobs:
         perl --version
         perl -MData::Printer -E'say $INC{"Data/Printer.pm"}'
         perl -MData::Printer -E'say $INC{"Data/Printer/Object.pm"}'
+        cat /usr/local/lib/perl5/site_perl/5.34.1/Data/Printer/Object.pm
     - name: Build module and execute tests
       env:
         AUTHOR_TESTING: 1
