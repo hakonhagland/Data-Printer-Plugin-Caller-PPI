@@ -202,9 +202,6 @@ sub _update_inc {
                 );
                 my $test_info = ( $i == 1 ? 'module' : 'eval' );
                 my $expect = ( $i == 1 ? $expect_noeval : $expect_eval );
-                use Data::Dumper qw(Dumper);
-                diag Dumper($module_name);
-                diag `cat $fn`;
                 $func->(
                     \&{"$module_name" . "::func"},
                     $exact_match
